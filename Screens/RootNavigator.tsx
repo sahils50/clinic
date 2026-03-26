@@ -1,9 +1,9 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import Tabs from './Tabs';
 import ViewBill from '../components/patient/ViewBill';
 import PatientProfileScreen from 'components/patient/patient-profile/PatientDetailProfile';
-
 import CreatePrescription from 'components/home/CreatePrescription';
 import { NewPatients } from 'components/patient/NewPatient';
 import Appointments from 'components/home/Appointments';
@@ -30,6 +30,7 @@ export type RootStackParamList = {
   AddVisit: undefined;
   Invoice: undefined;
   Notifications: undefined;
+  NewAppointments: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -50,7 +51,6 @@ const RootNavigator = () => {
       <Stack.Screen name="AddVisit" component={AddVisit} />
       <Stack.Screen name="Invoice" component={InvoiceScreen} />
       <Stack.Screen name="Notifications" component={Notifications} />
-      <Stack.Screen name="AddVisit" component={AddVisit} />
       <Stack.Screen name="NewAppointments" component={NewAppointment} />
     </Stack.Navigator>
   );

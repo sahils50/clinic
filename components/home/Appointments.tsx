@@ -7,8 +7,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'Screens/RootNavigator';
 import { Plus } from 'lucide-react-native';
 
-
-
 type Appointment = {
   id: number;
   name: string;
@@ -75,8 +73,6 @@ const getStatusStyle = (status: string) => {
 };
 
 export default function AppointmentsScreen() {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
   const [activeTab, setActiveTab] = useState<'ALL' | 'TODAY' | 'UPCOMING' | 'COMPLETED'>('ALL');
 
   const filteredAppointments = useMemo(() => {
@@ -84,7 +80,6 @@ export default function AppointmentsScreen() {
   }, [activeTab]);
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
 
   return (
     <LinearGradient
@@ -154,11 +149,7 @@ export default function AppointmentsScreen() {
                     {item.status}
                   </Text>
                   <Pressable
-                    onPress={() =>
-                      navigation.navigate('AddVisit', {
-                        patientID: item.id,
-                      })
-                    }
+                    onPress={() => navigation.navigate('AddVisit')}
                     className="mt-2 rounded-lg bg-indigo-600 px-3 py-1.5">
                     <Text className="text-xs font-semibold text-white">
                       {item.status === 'TODAY' ? 'Start Visit' : 'View Details'}

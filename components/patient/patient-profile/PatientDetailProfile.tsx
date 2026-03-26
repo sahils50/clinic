@@ -8,6 +8,7 @@ import PatientLabReportList from './PatientLabReportList';
 import PatientVisitList from './PatientVisitList';
 import PatientBillList from './PatientBillList';
 import PatientNotes from './PatientNotes';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const mockVisits = [
   { id: '1', date: 'April 5, 2024', title: 'General Consultation', hasFollowUpDue: true },
@@ -88,93 +89,95 @@ const PatientProfileScreen = () => {
       start={{ x: 0.5, y: 0 }}
       end={{ x: 0.5, y: 1 }}
       className="flex-1">
-      <View className="flex-1">
-        {/* Header Section */}
-        <View className="items-center pb-8 pt-12">
-          <View className="mb-4 h-24 w-24 items-center justify-center rounded-full bg-gray-300">
-            <Text className="text-5xl">👤</Text>
+      <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+        <View className="flex-1">
+          {/* Header Section */}
+          <View className="items-center pb-8 pt-12">
+            <View className="mb-4 h-24 w-24 items-center justify-center rounded-full bg-gray-300">
+              <Text className="text-5xl">👤</Text>
+            </View>
+
+            <Text className="text-2xl font-bold text-gray-800">Jane Smith</Text>
+            <Text className="mt-1 text-lg text-gray-600">25, Female</Text>
+            <Text className="mt-1 text-base text-gray-700">+2823427478</Text>
+
+            <View className="mt-6 flex-row flex-wrap justify-center gap-3">
+              <View className="rounded-full bg-gray-200 px-4 py-2">
+                <Text className="font-medium text-gray-700">No Allergies</Text>
+              </View>
+              <View className="rounded-full bg-gray-200 px-4 py-2">
+                <Text className="font-medium text-gray-700">Diabetes</Text>
+              </View>
+              <View className="rounded-full bg-gray-200 px-4 py-2">
+                <Text className="font-medium text-gray-700">B+</Text>
+              </View>
+              <View className="rounded-full bg-gray-200 px-4 py-2">
+                <Text className="font-medium text-gray-700">Metformin</Text>
+              </View>
+            </View>
           </View>
 
-          <Text className="text-2xl font-bold text-gray-800">Jane Smith</Text>
-          <Text className="mt-1 text-lg text-gray-600">25, Female</Text>
-          <Text className="mt-1 text-base text-gray-700">+2823427478</Text>
-
-          <View className="mt-6 flex-row flex-wrap justify-center gap-3">
-            <View className="rounded-full bg-gray-200 px-4 py-2">
-              <Text className="font-medium text-gray-700">No Allergies</Text>
-            </View>
-            <View className="rounded-full bg-gray-200 px-4 py-2">
-              <Text className="font-medium text-gray-700">Diabetes</Text>
-            </View>
-            <View className="rounded-full bg-gray-200 px-4 py-2">
-              <Text className="font-medium text-gray-700">B+</Text>
-            </View>
-            <View className="rounded-full bg-gray-200 px-4 py-2">
-              <Text className="font-medium text-gray-700">Metformin</Text>
-            </View>
+          {/* Tabs */}
+          <View className="flex-row border-b border-gray-300 bg-white">
+            {(['Visits', 'Lab Reports', 'Bills', 'Notes'] as const).map((tab) => (
+              <TouchableOpacity
+                key={tab}
+                onPress={() => setActiveTab(tab)}
+                className="flex-1 items-center py-4"
+                activeOpacity={0.7}>
+                <Text
+                  className={`pb-1 text-base font-medium ${
+                    activeTab === tab ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-600'
+                  }`}>
+                  {tab}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
+
+          {/* Content Area */}
+          <ScrollView className="flex-1 bg-white px-6">
+            {/* Visits Tab */}
+            {activeTab === 'Visits' && (
+              <PatientVisitList
+                visits={mockVisits}
+                onViewPrescription={(visitId) => {
+                  console.log('View prescription for visit:', visitId);
+                }}
+              />
+            )}
+
+            {/* Lab Reports Tab */}
+            {activeTab === 'Lab Reports' && (
+              <PatientLabReportList
+                reports={mockLabReports}
+                onViewReport={(reportId) => {
+                  console.log('View lab report:', reportId);
+                }}
+              />
+            )}
+
+            {/* Placeholder for Bills and Notes */}
+            {activeTab === 'Bills' && (
+              <PatientBillList
+                bills={mockBills}
+                onViewInvoice={(billId) => {
+                  console.log('View invoice:', billId);
+                  // Navigate to invoice details or open PDF/modal
+                }}
+              />
+            )}
+            {activeTab === 'Notes' && <PatientNotes savedNotes={mockNotes} />}
+          </ScrollView>
+
+          {/* Bottom Action Bar */}
+          <BottomActionBar
+            onAddVisit={() => console.log('Add Visit pressed')}
+            onCreatePrescription={() => console.log('Create Prescription pressed')}
+            onAddLabTest={() => console.log('Add Lab Test pressed')}
+          />
         </View>
-
-        {/* Tabs */}
-        <View className="flex-row border-b border-gray-300 bg-white">
-          {(['Visits', 'Lab Reports', 'Bills', 'Notes'] as const).map((tab) => (
-            <TouchableOpacity
-              key={tab}
-              onPress={() => setActiveTab(tab)}
-              className="flex-1 items-center py-4"
-              activeOpacity={0.7}>
-              <Text
-                className={`pb-1 text-base font-medium ${
-                  activeTab === tab ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-600'
-                }`}>
-                {tab}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Content Area */}
-        <ScrollView className="flex-1 bg-white px-6">
-          {/* Visits Tab */}
-          {activeTab === 'Visits' && (
-            <PatientVisitList
-              visits={mockVisits}
-              onViewPrescription={(visitId) => {
-                console.log('View prescription for visit:', visitId);
-              }}
-            />
-          )}
-
-          {/* Lab Reports Tab */}
-          {activeTab === 'Lab Reports' && (
-            <PatientLabReportList
-              reports={mockLabReports}
-              onViewReport={(reportId) => {
-                console.log('View lab report:', reportId);
-              }}
-            />
-          )}
-
-          {/* Placeholder for Bills and Notes */}
-          {activeTab === 'Bills' && (
-            <PatientBillList
-              bills={mockBills}
-              onViewInvoice={(billId) => {
-                console.log('View invoice:', billId);
-                // Navigate to invoice details or open PDF/modal
-              }}
-            />
-          )}
-          {activeTab === 'Notes' && <PatientNotes savedNotes={mockNotes} />}
-        </ScrollView>
-
-        {/* Bottom Action Bar */}
-        <BottomActionBar
-          onAddVisit={() => console.log('Add Visit pressed')}
-          onCreatePrescription={() => console.log('Create Prescription pressed')}
-          onAddLabTest={() => console.log('Add Lab Test pressed')}
-        />
-      </View>
+      </SafeAreaView>
     </LinearGradient>
   );
 };

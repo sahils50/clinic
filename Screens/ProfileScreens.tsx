@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Gender = 'Male' | 'Female' | 'Other';
 
-export default function ProfileSetup(): JSX.Element {
+export default function ProfileSetup() {
   const [fullName, setFullName] = useState('');
   const [gender, setGender] = useState<Gender | null>(null);
   const [specialization, setSpecialization] = useState('Dentist');
